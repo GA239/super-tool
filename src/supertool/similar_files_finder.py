@@ -13,6 +13,9 @@ def duplicates_printer(duplicates: dict) -> None:
     :return: None
     """
 
+    if not isinstance(duplicates, dict):
+        return
+
     if not duplicates:
         print('Duplicates not found!')
         return
@@ -97,7 +100,7 @@ def check_for_duplicates_by_size(path: str) -> tuple:
                         hashes_by_size.values()))
 
 
-def check_for_duplicates(path: str) -> dict:
+def check_for_duplicates(path: str) -> (dict, None):
     """
     Creates a dictionary where the key is the hash of the files,
     and the values ​​are lists of the paths to the files
@@ -106,6 +109,10 @@ def check_for_duplicates(path: str) -> dict:
     :param path: path to the directory, with files to check
     :return: dictionary that contains a list of paths to the same files
     """
+
+    if not os.path.exists(path):
+        print('directory is not exist!')
+        return None
 
     hashes = {}
     # For all files with the same file size, get their hash

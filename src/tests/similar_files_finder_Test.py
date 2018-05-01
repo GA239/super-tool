@@ -212,6 +212,16 @@ class SimilarFilesTestsCase(unittest.TestCase):
         self.assertEqual(fake_out.getvalue().strip(),
                          'Duplicates not found!')
 
+    def test_duplicates_no_exist_dir(self):
+        """
+        tests reaction on non existing directory
+        """
+
+        with patch('sys.stdout', new=StringIO()) as fake_out:
+            similar_files_finder.duplicates_printer(similar_files_finder.check_for_duplicates('fake'))
+        self.assertEqual(fake_out.getvalue().strip(),
+                         'directory is not exist!')
+
     def test_duplicates_printer_unique_files(self):
         """
         tests the representation of the dictionary with duplicates,
