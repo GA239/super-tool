@@ -232,8 +232,12 @@ class SimilarFilesTestsCase(unittest.TestCase):
             with TemporaryDirectory() as temp_dir:
                 file_path1 = os.path.join(temp_dir, '1')
                 create_file_with_content(file_path1, 'hello')
-                file_path2 = os.path.join(temp_dir, '2')
+
+                subdir = os.path.join(temp_dir, 'subdir')
+                os.makedirs(subdir)
+                file_path2 = os.path.join(subdir, '1')
                 create_file_with_content(file_path2, 'hello')
+
                 similar_files_finder.duplicates_printer(similar_files_finder.check_for_duplicates(temp_dir))
                 output = 'Duplicates found:\n---\nWith hash 5d41402abc4b2a76b9719d911017c592\n'
                 output += file_path1 + '\n'
