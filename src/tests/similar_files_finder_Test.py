@@ -216,11 +216,10 @@ class SimilarFilesTestsCase(unittest.TestCase):
         """
         tests reaction on non existing directory
         """
-
-        with patch('sys.stdout', new=StringIO()) as fake_out:
+        with self.assertRaises(ValueError) as raised_exception:
             similar_files_finder.duplicates_printer(similar_files_finder.check_for_duplicates('fake'))
-        self.assertEqual(fake_out.getvalue().strip(),
-                         'directory is not exist!')
+        self.assertEqual(raised_exception.exception.args[0],
+                         'Directory does non exist')
 
     def test_duplicates_printer_unique_files(self):
         """

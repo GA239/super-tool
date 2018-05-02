@@ -13,17 +13,13 @@ def duplicates_printer(duplicates: dict) -> None:
     :return: None
     """
 
-    if not isinstance(duplicates, dict):
-        return
-
     if not duplicates:
         print('Duplicates not found!')
-        return
-
-    print('Duplicates found:')
-    for key, values in duplicates.items():
-        print(f'---\nWith hash {key}')
-        print('\n'.join(values))
+    else:
+        print('Duplicates found:')
+        for key, values in duplicates.items():
+            print(f'---\nWith hash {key}')
+            print('\n'.join(values))
 
 
 def chunk_reader(f_obj: BinaryIO, chunk_size: int = 1024) -> AnyStr:
@@ -111,8 +107,7 @@ def check_for_duplicates(path: str) -> (dict, None):
     """
 
     if not os.path.exists(path):
-        print('directory is not exist!')
-        return None
+        raise ValueError("Directory does non exist")
 
     hashes = {}
     # For all files with the same file size, get their hash

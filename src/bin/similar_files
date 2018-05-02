@@ -12,6 +12,9 @@ if __name__ == '__main__':
     parser.add_argument('directory', type=str, help='target directory')
 
     args = parser.parse_args()
-
-    sim_files = similar_files_finder.check_for_duplicates(args.directory)
-    similar_files_finder.duplicates_printer(sim_files)
+    try:
+        sim_files = similar_files_finder.check_for_duplicates(args.directory)
+    except ValueError as e:
+        print(e)
+    else:
+        similar_files_finder.duplicates_printer(sim_files)
