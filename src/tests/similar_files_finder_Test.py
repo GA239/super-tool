@@ -63,8 +63,7 @@ def create_file_with_content(file_path: str, content: str) -> None:
 class HashReadingTestsCase(unittest.TestCase):
     """TestCase for testing the get_hash function"""
 
-    def create_file_and_test_get_hash(self, content='',
-                                      expected_hash='d41d8cd98f00b204e9800998ecf8427e'):
+    def _create_file_and_test_get_hash(self, content, expected_hash):
         """
         Creates a file with the specified content and
         checks that its hash matches the expected
@@ -86,7 +85,8 @@ class HashReadingTestsCase(unittest.TestCase):
 
         :return: None
         """
-        self.create_file_and_test_get_hash()
+        self._create_file_and_test_get_hash('',
+                                            'd41d8cd98f00b204e9800998ecf8427e')
 
     def test_get_hash(self):
         """
@@ -95,8 +95,8 @@ class HashReadingTestsCase(unittest.TestCase):
         :return: None
         """
 
-        self.create_file_and_test_get_hash('text',
-                                           '1cb251ec0d568de6a929b520c4aed8d1')
+        self._create_file_and_test_get_hash('text',
+                                            '1cb251ec0d568de6a929b520c4aed8d1')
 
 
 class SimilarFilesTestsCase(unittest.TestCase):
