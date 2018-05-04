@@ -3,4 +3,4 @@
 *venv/
 *cover/
 *.coverage
-*.egg-info
+*.egg-info/

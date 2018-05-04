@@ -1,8 +1,0 @@
-setup.py
-bin/similar_files
-supertool/__init__.py
-supertool/similar_files_finder.py
-supertool_distro.egg-info/PKG-INFO
-supertool_distro.egg-info/SOURCES.txt
-supertool_distro.egg-info/dependency_links.txt
-supertool_distro.egg-info/top_level.txt
