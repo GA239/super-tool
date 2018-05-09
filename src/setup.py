@@ -36,5 +36,7 @@ setup(
     tests_require=extract_requirements(os.path.join(DISTRO_ROOT_PATH,
                                                     'requirements', 'test.txt')),
     test_suite='nose.collector',
-    scripts=[os.path.join('bin', 'similar_files')]
+    scripts=[os.path.join('bin', 'similar_files'),
+             os.path.join('bin', 'weather_forecast'),
+             os.path.join('bin', 'weather_forecast_by_coords')]
 )

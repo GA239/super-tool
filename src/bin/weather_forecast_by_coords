@@ -1,0 +1,41 @@
+#!/usr/bin/env python3.6
+"""
+CLI application that gets from the user the address (city, street, etc.)
+At the address use the service http://nominatim.openstreetmap.org determines
+the coordinates.
+On the coordinates use the service http://api.openweathermap.org determines
+the weather and displays in the console information on
+the current and future weather (temperature, description, humidity, etc.)
+"""
+import argparse
+
+from supertool import weather, geo_nominatim
+
+
+@weather.exception_catcher
+def get_weather_description_by_address(args: 'argparse.Namespace') -> None:
+    """
+    A function that asks the user for the address,
+    and shows the current or future weather
+    for the entered address
+
+    :param args: parameters
+    :return: None
+    """
+
+    location = geo_nominatim.get_coordinates(args.address)
+    reports = [
+        'Location found:',
+        location['name'],
+        '\n'.join(weather.get_weather(location['coordinates'], 'weather'))
+    ]
+    if args.forecast:
+        reports.append('\n'.join(weather.get_weather(location['coordinates'], 'forecast')))
+    print('\n'.join(reports))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='get weather')
+    parser.add_argument('address', type=str, help='target Address')
+    parser.add_argument('--forecast', help='show current weather & forecast', action='store_true')
+    get_weather_description_by_address(parser.parse_args())

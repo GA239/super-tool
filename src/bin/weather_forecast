@@ -1,0 +1,36 @@
+#!/usr/bin/env python3.6
+"""
+CLI application that requests weather and displays
+its description and forecast,
+depending on the parameters
+"""
+import argparse
+
+from supertool import weather
+
+
+@weather.exception_catcher
+def get_weather(args: 'argparse.Namespace') -> None:
+    """
+    Function that requests weather and displays
+    its description and forecast,
+    depending on the parameters
+
+    :param args: parameters
+    :return: None
+    """
+
+    if args.forecast:
+        print('\n'.join(weather.get_weather(args.Location,
+                                            'forecast', args.api)))
+    else:
+        print('\n'.join(weather.get_weather(args.Location,
+                                            'weather', args.api)))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='get weather')
+    parser.add_argument('Location', type=str, help='target Location')
+    parser.add_argument('--api', help='Api', default='c8d657d3595e266e5a04cfe2f7282567')
+    parser.add_argument('--forecast', help='forecast', action='store_true')
+    get_weather(parser.parse_args())

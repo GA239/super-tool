@@ -4,3 +4,4 @@
 *cover/
 *.coverage
 *.egg-info/
+*eggs/
