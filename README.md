@@ -1,14 +1,14 @@
 # SUPER-tool
 
 
-Sudper-tool is a set of tools created for training purposes within the epam course.
+Super-tool is a set of tools created for training purposes within the epam course.
 
 ## Installation and Startup
 
 To use the package, you need to:
 
 ```
-	pip install -e "git+https://github.com/GA239/pip_tst.git#egg=subdir&subdirectory=src"
+	pip install -e "git+https://github.com/GA239/super-tool.git#egg=supertool&subdirectory=src"
 ```
 
 ## Dependencies
