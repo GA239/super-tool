@@ -38,5 +38,9 @@ setup(
     test_suite='nose.collector',
     scripts=[os.path.join('bin', 'similar_files'),
              os.path.join('bin', 'weather_forecast'),
-             os.path.join('bin', 'weather_forecast_by_coords')]
+             os.path.join('bin', 'weather_forecast_by_coords'),
+             os.path.join('bin', 'gui_calculator'),
+             os.path.join('bin', 'gui_similar_files'),
+             os.path.join('bin', 'gui_weather')],
+    zip_safe=False
 )

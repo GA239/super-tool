@@ -1,0 +1,16 @@
+"""
+The script that calls the application to
+search for the weather by some address
+"""
+import sys
+
+from PyQt5 import QtWidgets
+
+from supertool import weather_gui
+
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = weather_gui.GetWeatherWidget()
+    window.show()
+    sys.exit(app.exec_())

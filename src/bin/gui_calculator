@@ -1,0 +1,15 @@
+"""
+The script that calls the calculator application
+"""
+import sys
+
+from PyQt5 import QtWidgets
+
+from supertool import calculator
+
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = calculator.Calculator()
+    window.show()
+    sys.exit(app.exec_())

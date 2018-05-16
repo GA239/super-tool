@@ -84,7 +84,6 @@ class WeatherTestsCase(unittest.TestCase):
             'pressure (hPa):                               1010\n'
             'humidity (%):                                   67\n'
             'wind speed (meter/sec):                        2.1\n'
-            'wind direction (deg):                          270\n'
             'cloudiness (%):                                 12'
         )
         self.assertEqual(result, expected_report, 'Incorrect weather description')
@@ -200,7 +199,6 @@ class WeatherTestsCase(unittest.TestCase):
             'pressure (hPa):                               1010\n'
             'humidity (%):                                   67\n'
             'wind speed (meter/sec):                        2.1\n'
-            'wind direction (deg):                          270\n'
             'cloudiness (%):                                 12\n'
             '               2018-05-06 21:00:00                \n'
             'Description                                 cloudy\n'
@@ -208,7 +206,6 @@ class WeatherTestsCase(unittest.TestCase):
             'pressure (hPa):                               1010\n'
             'humidity (%):                                   67\n'
             'wind speed (meter/sec):                        2.1\n'
-            'wind direction (deg):                          270\n'
             'cloudiness (%):                                 12'
         )
 
@@ -224,7 +221,7 @@ class WeatherTestsCase(unittest.TestCase):
         """
 
         with self.assertRaises(df.ResponseError) as raised_exception:
-            weather.get_weather('London', postfix, 'df')
+            weather.get_weather('London', postfix, api_key='df')
         self.assertEqual(raised_exception.exception.args[0],
                          'Code: 401 -- Invalid API key. '
                          'Please see http://openweathermap.org/faq#error401 for more info.')

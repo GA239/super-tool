@@ -53,6 +53,7 @@ def make_open_weather_request(location: str or dict,
 
 def get_weather(location: str or dict,
                 request_postfix: str,
+                format_as_json=False,
                 api_key: str = df.OPEN_WEATHER_API_KEY) -> tuple:
     """
     Requests a weather description for a given location
@@ -61,6 +62,7 @@ def get_weather(location: str or dict,
     :param request_postfix: api service of openweathermap ex :
     'weather' for current weather or
     'forecast' for forecast weather
+    :param format_as_json: method of presenting the result
     :param api_key: api key for api.openweathermap.org
     :return: List with dates and weather descriptions
     """
@@ -70,6 +72,8 @@ def get_weather(location: str or dict,
     if not response.ok:
         raise df.ResponseError(' -- '.join([f"Code: {response_as_json['cod']}",
                                             f"{response_as_json['message']}"]))
+    if format_as_json:
+        return response_as_json
     return open_weather_reporter(request_postfix)(response_as_json)
 
 
@@ -87,7 +91,6 @@ def weather_block_report(weather_json_block: dict) -> str:
         'pressure (hPa):',
         'humidity (%):',
         'wind speed (meter/sec):',
-        'wind direction (deg):',
         'cloudiness (%):'
     ]
 
@@ -100,7 +103,6 @@ def weather_block_report(weather_json_block: dict) -> str:
         weather_json_block['main']['pressure'],
         weather_json_block['main']['humidity'],
         weather_json_block['wind']['speed'],
-        weather_json_block['wind']['deg'],
         weather_json_block['clouds']['all']
     ]
 

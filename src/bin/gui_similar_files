@@ -1,0 +1,16 @@
+"""
+The script that calls the application to
+search for the same files in the directory
+"""
+import sys
+
+from PyQt5 import QtWidgets
+
+from supertool import similar_files_gui
+
+
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = similar_files_gui.SimilarFilesFinderWidget()
+    window.show()
+    sys.exit(app.exec_())
