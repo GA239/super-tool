@@ -110,7 +110,7 @@ class SimilarFilesFinderWidget(QtWidgets.QWidget):
             if not sim_files:
                 label = 'Duplicates not found!'
             else:
-                label = 'Hashes of duplicate files'
+                label = 'Duplicates:'
             self.model.setHorizontalHeaderLabels([self.tr(label)])
             self.add_items(sim_files)
 
