@@ -21,6 +21,8 @@ To use the package, you need to:
 ### Base requirements 
 
 - requests==2.18.4
+- PyQt5==5.10.1
+- PyQt5-tools==5.9.0.1.2
 
 ## Support
 
