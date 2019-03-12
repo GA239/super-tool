@@ -28,7 +28,7 @@ setup(
     license='MIT',
     classifiers=[
         'Topic :: Education',
-        'Programming language :: Python :: 3.6',
+        'Programming language :: Python :: 3.7',
     ],
     packages=find_packages(exclude=['tests']),
     install_requires=extract_requirements(os.path.join(DISTRO_ROOT_PATH,
