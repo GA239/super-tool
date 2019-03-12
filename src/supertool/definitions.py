@@ -1,3 +1,5 @@
+"""Module with consts and custom exceptions"""
+
 NOMINATIM_URL = "http://nominatim.openstreetmap.org"
 NOMINATIM_DEFAULT_POSTFIX = '/search'
 
@@ -7,8 +9,12 @@ REPORT_TABLE_SIZE = 50
 
 
 class ResponseError(Exception):
+    """Custom Response Error exception"""
+
     pass
 
 
 class ProcessError(Exception):
+    """Custom Process Error exception"""
+
     pass

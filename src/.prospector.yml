@@ -1,0 +1,24 @@
+strictness: medium
+test-warnings: true
+doc-warnings: true
+autodetect: false
+max-line-length: 128
+
+pep8:
+    full: true
+
+pylint:
+    run: true
+    disable:
+      - import-error
+      - arguments-differ
+      - inconsistent-return-statements
+      - no-else-return
+
+pep257:
+    run: true
+    disable:
+      - D203 # 1 blank line required before class docstring
+      - D212 # Multi-line docstring summary should start at the first line
+      - D213 # Multi-line docstring summary should start at the second line
+      - D104 # Missing docstring in public package

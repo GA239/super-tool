@@ -1,7 +1,5 @@
-"""
-Module containing functions for working with the
-http://api.openweathermap.org service API
-"""
+"""Module containing functions for working with the http://api.openweathermap.org service API"""
+
 import functools
 import requests
 import logging
@@ -15,8 +13,7 @@ def make_open_weather_request(location: str or dict,
                               url: str = df.OPEN_WEATHER_URL,
                               api_key: str = df.OPEN_WEATHER_API_KEY) -> 'requests.models.Response':
     """
-    Sends a request to http://api.openweathermap.org
-    and returns a response
+    Sends a request to http://api.openweathermap.org and returns a response
 
     :param location: location query param for openweathermap
     :param request_postfix: api service of openweathermap
@@ -24,7 +21,6 @@ def make_open_weather_request(location: str or dict,
     :param api_key: api key for api.openweathermap.org
     :return: 'Response' -- json response
     """
-
     if isinstance(location, str):
         query_params = {
             'q': location,
@@ -66,7 +62,6 @@ def get_weather(location: str or dict,
     :param api_key: api key for api.openweathermap.org
     :return: List with dates and weather descriptions
     """
-
     response = make_open_weather_request(location, request_postfix, api_key=api_key)
     response_as_json = response.json()
     if not response.ok:
@@ -84,7 +79,6 @@ def weather_block_report(weather_json_block: dict) -> str:
     :param weather_json_block: dictionary with weather information
     :return: str -- report with weather information
     """
-
     labels = [
         'Description',
         'temperature (Celsius):',
@@ -116,6 +110,7 @@ def make_location_report(place: str,
                          report_prefix: str) -> str:
     """
     Generates a location report using the information from json.
+
     This report is used as a header for the weather report.
 
     :param place: the place where the weather was measured
@@ -124,7 +119,6 @@ def make_location_report(place: str,
     current or forecast
     :return: str -- report with location information
     """
-
     return '\n'.join([
         ''.rjust(df.REPORT_TABLE_SIZE, '-'),
         f'{report_prefix} in {place} ({country})'.center(df.REPORT_TABLE_SIZE),
@@ -135,15 +129,15 @@ def make_location_report(place: str,
 def current_weather_json_parser(response_as_json: dict) -> tuple:
     """
     Parse the response from the http://api.openweathermap.org
-    after requesting the current weather 
-    and create the corresponding reports
 
-    :param response_as_json: json response 
+    Parse the response after requesting the current
+    weather and create the corresponding reports
+
+    :param response_as_json: json response
     from http://api.openweathermap.org
-    :return: tuple -- reports with location 
+    :return: tuple -- reports with location
     and current weather information
     """
-
     location_report = make_location_report(response_as_json['name'],
                                            response_as_json['sys']['country'],
                                            'Current weather')
@@ -153,15 +147,15 @@ def current_weather_json_parser(response_as_json: dict) -> tuple:
 def forecast_weather_json_parser(response_as_json: dict) -> tuple:
     """
     Parse the response from the http://api.openweathermap.org
-    after requesting the forecast weather 
-    and create the corresponding reports
 
-    :param response_as_json: json response 
+    Parse the response after requesting the forecast
+    weather and create the corresponding reports
+
+    :param response_as_json: json response
     from http://api.openweathermap.org
-    :return: tuple -- reports with location 
+    :return: tuple -- reports with location
     and forecast weather information
     """
-
     location_report = make_location_report(response_as_json['city']['name'],
                                            response_as_json['city']['country'],
                                            'The weather forecast')
@@ -176,13 +170,11 @@ def forecast_weather_json_parser(response_as_json: dict) -> tuple:
 def open_weather_reporter(request_postfix: str) -> typing.Callable:
     """
     Returns a function that will parse json from http://api.openweathermap.org
-    and will create correct report depending on the service
 
     :param request_postfix: api service of openweathermap
     :return: typing.Callable -- function that will
     parse json and create report
     """
-
     if request_postfix == 'forecast':
         return forecast_weather_json_parser
     elif request_postfix == 'weather':
@@ -191,11 +183,7 @@ def open_weather_reporter(request_postfix: str) -> typing.Callable:
 
 
 def exception_catcher(fn: typing.Callable) -> typing.Callable:
-    """
-    Decorator, which catches and processes some exceptions
-    that may  occur in the current module
-    """
-
+    """Decorator, which catches and processes some exceptions that may  occur in the current module"""
     @functools.wraps(fn)
     def inner(*args, **kwargs):
         try:
@@ -210,7 +198,3 @@ def exception_catcher(fn: typing.Callable) -> typing.Callable:
             print(f'Error! {e}')
             logging.exception(e)
     return inner
-
-
-if __name__ == '__main__':  # pragma: no cover
-    pass
