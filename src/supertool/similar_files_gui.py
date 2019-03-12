@@ -1,3 +1,4 @@
+"""Find similar files in directory with GUI"""
 import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -7,11 +8,10 @@ from supertool import usefull_widget_tools as uwt
 
 
 class SimilarFilesFinderWidget(QtWidgets.QWidget):
-    """
-    Widget for finding duplicate files
-    """
+    """Widget for finding duplicate files."""
 
     def __init__(self, parent=None):
+        """Init Widget for finding duplicate files."""
         super(SimilarFilesFinderWidget, self).__init__(parent)
         self.title = 'Similar files GUI'
         self.model = QtGui.QStandardItemModel()
@@ -21,11 +21,7 @@ class SimilarFilesFinderWidget(QtWidgets.QWidget):
         self.init_ui()
 
     def init_ui(self):
-        """
-        additional actions for initializing the interface
-        :return: None
-        """
-
+        """Additional actions for initializing the interface"""
         self.setWindowTitle(self.title)
         self.setGeometry(QtCore.QRect(100, 100, 400, 400))
         self.data_layout.setContentsMargins(0, 0, 0, 0)
@@ -61,20 +57,13 @@ class SimilarFilesFinderWidget(QtWidgets.QWidget):
         self.data_layout.addWidget(self.tree_view)
         self.setLayout(self.data_layout)
 
-    def keyPressEvent(self, event):
-        """
-        Starts a search for duplicate files when you press enter
-        """
-
+    def keyPressEvent(self, event):  # noqa
+        """Starts a search for duplicate files when you press enter."""
         if event.key() == 16777220:
             self.search_button_pressed()
 
     def dir_find(self):
-        """
-        It helps to select a directory by showing
-        the directory selection window
-        """
-
+        """It helps to select a directory by showing the directory selection window."""
         directory = QtWidgets.QFileDialog.getExistingDirectory(self, "Выберите каталог")
         self.line_edit_with_buttons.set_text(directory)
 
@@ -85,7 +74,6 @@ class SimilarFilesFinderWidget(QtWidgets.QWidget):
         :param elements: dict of similar files
         :return: None
         """
-
         for element in enumerate(elements.values()):
             item = QtGui.QStandardItem(f'Similar group {element[0]}')
             self.model.appendRow(item)
@@ -94,11 +82,7 @@ class SimilarFilesFinderWidget(QtWidgets.QWidget):
                 item.appendRow(item_2)
 
     def search(self):
-        """
-        Starts the same file search
-        :return:
-        """
-
+        """Starts the same file search."""
         self.model.clear()
         self.model.setHorizontalHeaderLabels([self.tr("")])
 
@@ -115,6 +99,7 @@ class SimilarFilesFinderWidget(QtWidgets.QWidget):
             self.add_items(sim_files)
 
     def search_button_pressed(self):
+        """Action for search button"""
         self.search()
 
 

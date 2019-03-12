@@ -1,3 +1,5 @@
+"""Desktop UI calculator"""
+
 import functools
 import sys
 
@@ -15,14 +17,13 @@ OPERATION_POW = 'pow'
 
 
 class NumericKeypad(QtWidgets.QWidget):
-    """
-    A widget that contains a numeric keypad and a point
-    """
+    """A widget that contains a numeric keypad and a point."""
 
     # Notifies of a key press on the numeric keypad
     numeric_keypad_signal = QtCore.pyqtSignal(str)
 
     def __init__(self, button_size_policy=None, button_font=None, parent=None):
+        """Init NumericKeypad widget"""
         super(NumericKeypad, self).__init__(parent)
 
         self.gridLayout = QtWidgets.QGridLayout(self)
@@ -37,7 +38,7 @@ class NumericKeypad(QtWidgets.QWidget):
             if i == 0:
                 self.gridLayout.addWidget(button, 3, 0, 1, 2)
             else:
-                self.gridLayout.addWidget(button, (i-1) // 3, (i-1) % 3, 1, 1)
+                self.gridLayout.addWidget(button, (i - 1) // 3, (i - 1) % 3, 1, 1)
 
         button = button_creator('point', '.')
         button.clicked.connect(functools.partial(self.button_pressed, '.'))
@@ -45,7 +46,7 @@ class NumericKeypad(QtWidgets.QWidget):
 
     def button_pressed(self, number: str) -> None:
         """
-        Notifies of a key press on the numeric keypad
+        Notifies of a key press on the numeric keypad.
 
         :param number: string representation of the pressed key
         :return: None
@@ -54,13 +55,12 @@ class NumericKeypad(QtWidgets.QWidget):
 
 
 class Keypad(QtWidgets.QWidget):
-    """
-    A widget that contains a numeric keypad widget anв operation buttons
-    """
+    """A widget that contains a numeric keypad widget anв operation buttons."""
 
     key_pad_signal = QtCore.pyqtSignal(str)
 
     def __init__(self, operations, button_font=None, parent=None):
+        """Init Keypad widget"""
         super(Keypad, self).__init__(parent)
 
         self.operations = operations
@@ -80,11 +80,7 @@ class Keypad(QtWidgets.QWidget):
         self.gridLayout.addWidget(self.num_key_pad, 1, 0, 4, 3)
 
     def _create_operation_buttons(self):
-        """
-        An internal method that creates and initializes operation buttons
-        :return: None
-        """
-
+        """An internal method that creates and initializes operation buttons"""
         # coordinates of buttons in grid layout
         operations_cords = (
             (0, 0, 1, 1),
@@ -116,19 +112,16 @@ class Keypad(QtWidgets.QWidget):
         :param text: string representation of the pressed key
         :return: None
         """
-
         self.key_pad_signal.emit(text)
 
 
 class Estimator(QtCore.QObject):
-    """
-    The core of the application,
-    in which the values are calculated
-    """
+    """The core of the application, in which the values are calculated"""
 
     estimation_info_signal = QtCore.pyqtSignal(str)
 
     def __init__(self, operations, parent=None):
+        """Init estimator."""
         super(Estimator, self).__init__(parent)
         self.first_number = None
         self.second_number = None
@@ -151,13 +144,7 @@ class Estimator(QtCore.QObject):
             operation['estimator'] = estimation
 
     def _clear(self):
-        """
-        Clears the buffer values and
-        emits a signal to clear the widget
-
-        :return: None
-        """
-
+        """Clears the buffer values and emits a signal to clear the widget."""
         self.first_number = None
         self.second_number = None
         self.current_number = ''
@@ -167,10 +154,10 @@ class Estimator(QtCore.QObject):
 
     def _estimate(self) -> float:
         """
-        Performs calculations according to the list of supported functions
+        Performs calculations according to the list of supported functions.
+
         :return: float -- estimated value
         """
-
         if self.current_operation == OPERATION_DIVISION and self.second_number == 0:
             raise ValueError('Zero division')
         return self.operations[self.current_operation]['estimator'](self.first_number,
@@ -178,21 +165,21 @@ class Estimator(QtCore.QObject):
 
     def num_pad_button_pressed(self, value: str) -> None:
         """
-        Processes the key press on the numeric keypad
+        Processes the key press on the numeric keypad.
+
         :param value:
         :return:
         """
-
         self.current_number += value
         self.estimation_info_signal.emit(f'{self.current_info}{self.current_number}')
 
     def operation_button_pressed(self, operation: str) -> None:
         """
-        Handles pressing the operation button
+        Handles pressing the operation button.
+
         :param operation: string representation of the operation
         :return:
         """
-
         if operation == OPERATION_CLEAR:
             self._clear()
         elif operation == OPERATION_ESTIMATE:
@@ -201,12 +188,7 @@ class Estimator(QtCore.QObject):
             self._computational_operation_handler(operation)
 
     def _equally_handler(self):
-        """
-        Handles the button press
-
-        :return: None
-        """
-
+        """Handles the button press."""
         try:
             self.second_number = float(self.current_number)
             result = self._estimate()
@@ -222,10 +204,10 @@ class Estimator(QtCore.QObject):
     def _computational_operation_handler(self, operation: str) -> None:
         """
         Handles pressing of the button with computing operation
+
         :param operation: string representation of the operation
         :return: None
         """
-
         if operation == OPERATION_SUBTRACTION and \
                 (self.current_number == '' or self.current_operation is not None):
             self.num_pad_button_pressed(self.operations[operation]['text'])
@@ -252,7 +234,6 @@ class Estimator(QtCore.QObject):
         :param value: -- float
         :return: int or float input value
         """
-
         if int(value) != 0 and value % int(value) == 0:
             return int(value)
         return value
@@ -262,6 +243,7 @@ class Calculator(QtWidgets.QWidget):
     """Main calculator widget"""
 
     def __init__(self, parent=None):
+        """Init calculator widget"""
         super(Calculator, self).__init__(parent)
 
         self.setWindowTitle("Calculator")
@@ -324,10 +306,10 @@ class Calculator(QtWidgets.QWidget):
         :param text: text value
         :return: None
         """
-
         self.line_edit.setText(text)
 
     def set_style(self):
+        """Optional method for setting dark them"""
         self.setStyleSheet("""
                 QWidget { background-color: #3C3F41 }
 

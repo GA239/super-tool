@@ -1,3 +1,5 @@
+"""Find similar files in directory."""
+
 import os
 import hashlib
 from typing import AnyStr, BinaryIO, Callable
@@ -12,7 +14,6 @@ def duplicates_printer(duplicates: dict) -> None:
     and the value is a list of paths to the duplicate files
     :return: None
     """
-
     if not duplicates:
         print('Duplicates not found!')
     else:
@@ -39,14 +40,12 @@ def chunk_reader(f_obj: BinaryIO, chunk_size: int = 1024) -> AnyStr:
 
 def get_hash(filename: str, hash_func: Callable = hashlib.md5) -> str:
     """
-    Estimate a hash of a file named filename,
-    using hash_func as hash function
+    Estimate a hash of a file named filename, using hash_func as hash function
 
     :param filename: filename
     :param hash_func: hash function
     :return: str -- hash value
     """
-
     hash_obj = hash_func()
     with open(filename, 'rb') as file_object:
         for chunk in chunk_reader(file_object):
@@ -58,16 +57,14 @@ def append_value_in_hash_table(table: dict, value: str,
                                key: str) -> None:
     """
     Adds a value to the hash table by key.
-    if there is already an entry in the key,
-    it adds a value to the list.
-    If there are no records for the key,
-    creates a new list and adds the value
+
+    if there is already an entry in the key, it adds a value to the list.
+    If there are no records for the key, creates a new list and adds the value
 
     :param table: hash-table
     :param value: value
     :param key: key
     """
-
     if table.get(key):
         table[key].append(value)
     else:
@@ -82,9 +79,8 @@ def check_for_duplicates_by_size(path: str) -> tuple:
     :param path: path to the directory, with files to check
     :return: tuple that contains paths to files
     """
-
     hashes_by_size = {}
-    for dir_path, dir_names, file_names in os.walk(path):
+    for dir_path, _, file_names in os.walk(path):
         for filename in file_names:
             full_path = os.path.join(dir_path, filename)
             append_value_in_hash_table(hashes_by_size, full_path,
@@ -98,14 +94,14 @@ def check_for_duplicates_by_size(path: str) -> tuple:
 
 def check_for_duplicates(path: str) -> (dict, None):
     """
+    Find duplicated files
+
     Creates a dictionary where the key is the hash of the files,
-    and the values ​​are lists of the paths to the files
-    whose hash matches the key
+    and the values ​​are lists of the paths to the files whose hash matches the key
 
     :param path: path to the directory, with files to check
     :return: dictionary that contains a list of paths to the same files
     """
-
     if not os.path.exists(path):
         raise ValueError("Directory does non exist")
 

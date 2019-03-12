@@ -1,3 +1,5 @@
+"""Module containing functions for working with the http://api.openweathermap.org service API (with GUI)"""
+
 from datetime import datetime
 import os
 import sys
@@ -14,8 +16,7 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 def from_ts_to_time_of_day(ts) -> str:
     """
-    Converts time from timestamp
-    format to string
+    Converts time from timestamp format to string
 
     :param ts: time
     :return: time as str
@@ -26,20 +27,16 @@ def from_ts_to_time_of_day(ts) -> str:
 
 def set_weather_icon(name):
     """
-    Opens a picture by name
+    Opens a picture by name.
 
     :param name: picture name
     :return: QPixmap -- picture
     """
-
     return QtGui.QPixmap(os.path.join(ROOT_PATH, 'weather_images', f"{name}.png"))
 
 
 class WorkerSignals(QtCore.QObject):
-    """
-    Signals for communicating the control
-    flow and the internal worker
-    """
+    """Signals for communicating the control flow and the internal worker."""
 
     finished = QtCore.pyqtSignal()
     error = QtCore.pyqtSignal(str)
@@ -47,24 +44,22 @@ class WorkerSignals(QtCore.QObject):
 
 
 class GetWeatherWorker(QtCore.QRunnable):
-    """
-    Worker thread for getting weather.
-    """
+    """Worker thread for getting weather."""
 
     signals = WorkerSignals()
 
     def __init__(self, address):
+        """Init GetWeatherWorker"""
         super(GetWeatherWorker, self).__init__()
         self.address = address
 
     def search(self):
         """
-        Requests the coordinates of the addressed address,
-        then asks for the coordinates.
+        Requests the coordinates of the addressed address, then asks for the coordinates.
+
         :return: Returns the weather, forecast and description
         of the place found
         """
-
         location = geo_nominatim.get_coordinates(self.address)
         description = weather.get_weather(location['coordinates'], 'weather', format_as_json=True)
         forecast = weather.get_weather(location['coordinates'], 'forecast', format_as_json=True)
@@ -72,10 +67,7 @@ class GetWeatherWorker(QtCore.QRunnable):
 
     @QtCore.pyqtSlot()
     def run(self):
-        """
-        main method within the workflow
-        """
-
+        """Main method within the workflow."""
         try:
             description, forecast, location = self.search()
         except ValueError as e:
@@ -93,10 +85,10 @@ class GetWeatherWorker(QtCore.QRunnable):
 
 
 class WeatherWidget(QtWidgets.QWidget):
-    """
-    Widget showing the current weather
-    """
+    """Widget showing the current weather."""
+
     def __init__(self, parent=None):
+        """Inti WeatherWidget"""
         super(WeatherWidget, self).__init__(parent)
 
         self.gridLayout = QtWidgets.QGridLayout(self)
@@ -139,11 +131,10 @@ class WeatherWidget(QtWidgets.QWidget):
 
 
 class GetWeatherWidget(QtWidgets.QWidget):
-    """
-    Main Get Weather widget
-    """
+    """Main Get Weather widget."""
 
     def __init__(self, parent=None):
+        """Init GetWeatherWidget"""
         super(GetWeatherWidget, self).__init__(parent)
         self.title = 'Weather GUI'
 
@@ -181,7 +172,7 @@ class GetWeatherWidget(QtWidgets.QWidget):
         self.forecast_widget = QtWidgets.QWidget(self)
         self.forecast_labels = []
 
-        self.gridLayout = QtWidgets.QGridLayout( self.forecast_widget )
+        self.gridLayout = QtWidgets.QGridLayout(self.forecast_widget)
         self.gridLayout.setObjectName("gridLayout")
 
         for i in range(FORECAST_LENGTH):
@@ -193,7 +184,7 @@ class GetWeatherWidget(QtWidgets.QWidget):
             for num, value in enumerate(fields.values()):
                 self.gridLayout.addWidget(value, num, i, 1, 1)
 
-            self.forecast_labels.append( fields )
+            self.forecast_labels.append(fields)
 
         self.top_spacer = QtWidgets.QSpacerItem(20, 40,
                                                 QtWidgets.QSizePolicy.Minimum,
@@ -216,17 +207,14 @@ class GetWeatherWidget(QtWidgets.QWidget):
         self.data_layout.addWidget(self.address_label)
 
         self.data_layout.addWidget(self.infoWidget)
-        self.data_layout.addWidget( self.forecast_widget )
+        self.data_layout.addWidget(self.forecast_widget)
         self.data_layout.addItem(self.bot_spacer)
 
         self.infoWidget.hide()
         self.forecast_widget.hide()
 
-    def keyPressEvent(self, event):
-        """
-        Starts a weather searching when you press enter
-        """
-
+    def keyPressEvent(self, event):  # noqa
+        """Starts a weather searching when you press enter."""
         if event.key() == 16777220:
             self.search_button_pressed()
 
@@ -237,19 +225,12 @@ class GetWeatherWidget(QtWidgets.QWidget):
         :param message: error message
         :return:
         """
-
         self.address_label.setText(message)
         self.infoWidget.hide()
         self.forecast_widget.hide()
 
     def search_button_pressed(self):
-        """
-        Start the search: create a new search instans,
-        send it to the thread and connect
-        signals to the handlers
-        :return: None
-        """
-
+        """Start the search: create a new search instans, send it to the thread and connect signals to the handlers."""
         worker = GetWeatherWorker(self.line_edit_with_buttons.get_text())
         worker.signals.result.connect(self.weather_result)
         worker.signals.error.connect(self.alert)
@@ -257,14 +238,13 @@ class GetWeatherWidget(QtWidgets.QWidget):
 
     def weather_result(self, description, forecasts, location):
         """
-        processing of weather query results
+        Processing of weather query results.
 
         :param description: description of the current weather
         :param forecasts: description of the weather forecast
         :param location: location found
         :return: None
         """
-
         for n, forecast in enumerate(forecasts['list'][:FORECAST_LENGTH]):
             self.forecast_labels[n]['time'].setText(from_ts_to_time_of_day(forecast['dt']))
             self.forecast_labels[n]['temperature'].setText(f"{forecast['main']['temp']} °C")
@@ -287,6 +267,7 @@ class GetWeatherWidget(QtWidgets.QWidget):
         self.forecast_widget.show()
 
     def set_style(self):
+        """Optional method for setting dark them"""
         self.setStyleSheet("""
                 QWidget { background-color: #3C3F41 }
 
@@ -340,5 +321,3 @@ if __name__ == '__main__':
     window = GetWeatherWidget()
     window.show()
     sys.exit(app.exec_())
-
-
